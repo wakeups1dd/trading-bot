@@ -54,6 +54,9 @@ def parse_positive_decimal(value: str | None, field_name: str) -> str:
     except (InvalidOperation, ValueError):
         raise ValidationError(f"--{field_name} must be a valid number.") from None
 
+    if not parsed.is_finite():
+        raise ValidationError(f"--{field_name} must be a finite number.")
+
     if parsed <= 0:
         raise ValidationError(f"--{field_name} must be greater than zero.")
 
@@ -82,4 +85,3 @@ def validate_order_args(
         raise ValidationError("--price is only valid for LIMIT orders.")
 
     return order
-

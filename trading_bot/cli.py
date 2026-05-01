@@ -39,8 +39,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--price", help="Limit price; required for LIMIT orders")
     parser.add_argument(
         "--base-url",
-        default=DEFAULT_BASE_URL,
-        help=f"Binance Futures API base URL (default: {DEFAULT_BASE_URL})",
+        default=None,
+        help=(
+            f"Binance Futures API base URL. Defaults to BINANCE_BASE_URL env var, "
+            f"then {DEFAULT_BASE_URL}"
+        ),
     )
     return parser
 
@@ -65,6 +68,11 @@ def get_credentials() -> tuple[str, str]:
         )
 
     return api_key or "", api_secret or ""
+
+
+def get_base_url() -> str:
+    """Return the API base URL, preferring BINANCE_BASE_URL from the environment."""
+    return os.getenv("BINANCE_BASE_URL") or DEFAULT_BASE_URL
 
 
 def print_request_summary(order: dict[str, str]) -> None:
@@ -111,7 +119,7 @@ def main() -> int:
         client = BinanceFuturesClient(
             api_key=api_key,
             api_secret=api_secret,
-            base_url=args.base_url,
+            base_url=args.base_url or get_base_url(),
             logger=logger,
         )
         response = place_order(client, order)
