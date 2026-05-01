@@ -7,10 +7,10 @@ from typing import Any
 
 from dotenv import load_dotenv
 
-from bot.client import BinanceAPIError, BinanceFuturesClient, DEFAULT_BASE_URL
-from bot.logging_config import setup_logging
-from bot.orders import place_order
-from bot.validators import ValidationError, validate_order_args
+from trading_bot.bot.client import BinanceAPIError, BinanceFuturesClient, DEFAULT_BASE_URL
+from trading_bot.bot.logging_config import setup_logging
+from trading_bot.bot.orders import place_order
+from trading_bot.bot.validators import ValidationError, validate_order_args
 
 
 def build_parser() -> argparse.ArgumentParser:
