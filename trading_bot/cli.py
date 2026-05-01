@@ -3,9 +3,14 @@ from __future__ import annotations
 import argparse
 import os
 import sys
+from pathlib import Path
 from typing import Any
 
 from dotenv import load_dotenv
+
+# Resolve the .env file relative to this file's directory so it is found
+# regardless of the current working directory.
+_ENV_FILE = Path(__file__).parent / ".env"
 
 try:
     from trading_bot.bot.client import (
@@ -86,7 +91,7 @@ def print_order_result(response: dict[str, Any]) -> None:
 
 
 def main() -> int:
-    load_dotenv()
+    load_dotenv(dotenv_path=_ENV_FILE, override=True)
     logger = setup_logging()
     parser = build_parser()
     args = parser.parse_args()
